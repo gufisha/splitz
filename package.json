@@ -1,38 +1,118 @@
 {
-  "name": "video-editor-app",
+  "name": "splitz",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
+  "main": "electron/main.js",
+  "homepage": "./",
+  "author": "Studio 303",
+  "description": "Video splitting application",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && cross-env NODE_ENV=development electron .\"",
+    "electron:build": "npm run build && electron-builder",
+    "electron:start": "cross-env NODE_ENV=production electron .",
+    "electron": "npm run build && electron .",
+    "package": "npm run build && electron-builder build --mac --win --linux --x64 --arm64"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.2",
+    "@ffmpeg/util": "^0.12.0",
+    "jszip": "^3.10.1",
+    "next": "^14.2.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "electron-is-dev": "^3.0.1"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^20.5.7",
+    "@types/react": "^18.2.21",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^24.8.8",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.48.0",
+    "eslint-config-next": "^13.4.19",
+    "typescript": "^5.2.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.studio303.splitz",
+    "productName": "Splitz",
+    "copyright": "Copyright © 2024 Studio 303",
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "public/icons/icon.icns",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "entitlements": null,
+      "entitlementsInherit": null,
+      "identity": null
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ],
+      "icon": "public/icons/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "AppImage"
+      ],
+      "icon": "public/icons/icon.png"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "dist/renderer/**/*",
+      "electron/**/*",
+      "package.json"
     ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public"
+      }
+    ],
+    "directories": {
+      "buildResources": "public",
+      "output": "release"
+    },
+    "asar": true
   }
 }

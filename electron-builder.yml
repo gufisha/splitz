@@ -1,0 +1,17 @@
+appId: com.studio303.splitz
+productName: Splitz
+directories:
+  output: dist
+  buildResources: build
+files:
+  - out/**/*
+  - electron/**/*
+  - package.json
+mac:
+  category: public.app-category.video
+win:
+  target: nsis
+linux:
+  target:
+    - deb
+    - AppImage
